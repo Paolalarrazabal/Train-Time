@@ -113,6 +113,12 @@ sessionStorage.setItem("frequency", tFrequency);
 sessionStorage.setItem("arrivalTime", tArrivalTime);
 sessionStorage.setItem("minutesAway", tMinutesAway);
 
+
+$("#name-input").val("");
+$("#destination-input").val("");
+$("#frequency-input").val("");
+$("#time-input").val("");
+
 });
 
 
@@ -145,6 +151,9 @@ database.ref().on("child_added", function(childSnapShot) {
     tRow.append(nameTd, destinationTd, frequencyTd, arrivalTimeTd, minutesAwayTd);
 
     $("tbody").append(tRow);  
+
+},  function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
 
 
 });
