@@ -13,23 +13,23 @@ firebase.initializeApp(firebaseConfig);
 
 let database = firebase.database(); 
 
-let name = "";
-let destination = ""; 
-let firstTrainTime = "";
-let frequency = "";
-let minutesAway = "";
-let arrivalTime = ""; 
+let tName = "";
+let tDestination = ""; 
+let tFirstTrainTime = "";
+let tFrequency = "";
+let tMinutesAway = "";
+let tArrivalTime = ""; 
 
 
 $("#add-train").on("click", function(event) {
 event.preventDefault(); 
 
-name = $("#name-input").val().trim(); 
-destination = $("#destination-input").val().trim();
-firstTrainTime = $("#time-input").val().trim();
-frequency = $("#frequency-input").val().trim();
+tName = $("#name-input").val().trim(); 
+tDestination = $("#destination-input").val().trim();
+tFirstTrainTime = $("#time-input").val().trim();
+tFrequency = $("#frequency-input").val().trim();
 
-let firstTrainTimeConverted = moment(firstTrainTime, "HH:mm").subtract(1, "years");
+let firstTrainTimeConverted = moment(tFirstTrainTime, "HH:mm").subtract(1, "years");
 console.log(firstTrainTimeConverted);
 
 let currentTime = moment(); 
@@ -38,37 +38,85 @@ console.log("current time:" + moment(currentTime).format("hh:mm"));
 let difference = moment().diff(moment(firstTrainTimeConverted), "minutes");
 console.log("difference in time: " + difference);
 
-let remainder = difference % frequency;
+let remainder = difference % tFrequency;
 console.log(remainder);
 
-let minutesAway = frequency - remainder;
-console.log("minutes away: "+ minutesAway);
+let tMinutesAway = tFrequency - remainder;
+console.log("minutes away: "+ tMinutesAway);
 
-let nextArrival = moment().add(minutesAway, "minutes");
-let arrivalTime =(moment(nextArrival).format("hh;mm"));
-console.log("arrival time: " + arrivalTime);
+let nextArrival = moment().add(tMinutesAway, "minutes");
+let tArrivalTime =(moment(nextArrival).format("hh:mm"));
+console.log("arrival time: " + tArrivalTime);
 
 
 
-database.ref().push( {
-  name: name, 
-  destination: destination,
-  firstTrainTime: firstTrainTime, 
-  minutesAway: minutesAway,
-  arrivalTime: arrivalTime
+database.ref().push( { 
+  
+  name: tName, 
+  destination: tDestination,
+  frequency: tFrequency,
+  firstTrainTime: tFirstTrainTime, 
+  arrivalTime: tArrivalTime,
+  minutesAway: tMinutesAway
+});
 
 });
+
+
+database.ref().on("child_added", function(childSnapShot) {
+    console.log(childSnapShot.val());
+
+    let tName = childSnapShot.val().name; 
+    let tDestination = childSnapShot.val().name; 
+    let tFrequency = childSnapShot.val().frequency; 
+    let tArrivalTime = childSnapShot.val().arrivalTime;
+    let tMinutesAway = childSnapShot.val().minutesAway; 
+
+
+    console.log(tName);
+    console.log(tDestination);
+    console.log(tFrequency);
+    console.log(tArrivalTime);
+    console.log(tMinutesAway); 
+
+ 
+
+    let tRow = $("<tr>"); 
+
+    let nameTd = $("<td>").text(tName); 
+    let destinationTd = $("<td>").text(tDestination); 
+    let frequencyTd = $("<td>").text(tFrequency);
+    let arrivalTimeTd = $("<td>").text(tArrivalTime);
+    let minutesAwayTd = $("<td>").text(tMinutesAway);
+
+    tRow.append(nameTd, destinationTd, frequencyTd, arrivalTimeTd, minutesAwayTd);
+
+    $("tbody").append(tRow);  
+
+
+});
+
+
+
+
+sessionStorage.clear(); 
+
+sessionStorage.setItem("name", nameTd);
+sessionStorage.setItem("destination", destinationTd);
+sessionStorage.setItem("frequency", frequencyTd);
+sessionStorage.setItem("arrivalTime", arrivalTimeTd);
+sessionStorage.setItem("minutesAway", minutesAwayTd);
+sessionStorage.setItem("tRow", tRow);
+
 
 console.log(name);
 console.log(destination);
 console.log(frequency); 
 console.log(firstTrainTime);
 
-});
 
-function(errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-    };
+
+
 
 
 
