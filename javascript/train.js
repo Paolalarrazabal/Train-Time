@@ -11,6 +11,24 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === " ") c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+        }
+    }
+    return null;
+    }
+
+
+
+
 let database = firebase.database(); 
 
 let tName = "";
@@ -61,6 +79,32 @@ database.ref().push( {
 });
 
 
+
+document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+
+
+document.cookie = "name=" + tName;
+document.cookie = "destination=" + tDestination;
+document.cookie = "frequency=" + tFrequency;
+document.cookie = "arrivalTime=" + tArrivalTime;
+document.cookie = "minutesAway=" + tMinutesAway;
+
+
+console.log(document.cookie);
+
+let cookieName = readCookie("name");
+let cookieDestination = readCookie("destination");
+let cookieFrequency = readCookie("frequency");
+let cookieArrivalTime = readCookie("arrivalTime");
+let cookieMinutesAway = readCookie("minutesAway"); 
+
+console.log(cookieName);
+console.log(cookieDestination);
+console.log(cookieFrequency);
+console.log(cookieArrivalTime);
+console.log(cookieMinutesAway);
+
+
 sessionStorage.clear(); 
 
 sessionStorage.setItem("name", tName);
@@ -76,7 +120,7 @@ database.ref().on("child_added", function(childSnapShot) {
     console.log(childSnapShot.val());
 
     let tName = childSnapShot.val().name; 
-    let tDestination = childSnapShot.val().name; 
+    let tDestination = childSnapShot.val().destination; 
     let tFrequency = childSnapShot.val().frequency; 
     let tArrivalTime = childSnapShot.val().arrivalTime;
     let tMinutesAway = childSnapShot.val().minutesAway; 
@@ -112,10 +156,9 @@ database.ref().on("child_added", function(childSnapShot) {
 
 
 
-console.log(name);
-console.log(destination);
-console.log(frequency); 
-console.log(firstTrainTime);
+
+
+
 
 
 
