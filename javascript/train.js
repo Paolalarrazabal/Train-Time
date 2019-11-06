@@ -60,6 +60,15 @@ database.ref().push( {
   minutesAway: tMinutesAway
 });
 
+
+sessionStorage.clear(); 
+
+sessionStorage.setItem("name", tName);
+sessionStorage.setItem("destination", tDestination);
+sessionStorage.setItem("frequency", tFrequency);
+sessionStorage.setItem("arrivalTime", tArrivalTime);
+sessionStorage.setItem("minutesAway", tMinutesAway);
+
 });
 
 
@@ -99,14 +108,8 @@ database.ref().on("child_added", function(childSnapShot) {
 
 
 
-sessionStorage.clear(); 
 
-sessionStorage.setItem("name", nameTd);
-sessionStorage.setItem("destination", destinationTd);
-sessionStorage.setItem("frequency", frequencyTd);
-sessionStorage.setItem("arrivalTime", arrivalTimeTd);
-sessionStorage.setItem("minutesAway", minutesAwayTd);
-sessionStorage.setItem("tRow", tRow);
+
 
 
 console.log(name);
